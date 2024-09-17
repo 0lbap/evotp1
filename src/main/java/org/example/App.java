@@ -1,30 +1,27 @@
 package org.example;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class App {
 
     public static void main(String[] args) {
-        ClassAnalyser ca = new ClassAnalyser("src/main/java/org/example/Necessity.java");
+        ClassAnalyser ca = new ClassAnalyser("src/main/java/org/example/Product.java");
         System.out.println("Class name: " + ca.getClassName());
-        System.out.println("Class attributes:\n" + String.join("\n", ca.getFields()));
-        System.out.println("Class methods:\n" + String.join("\n", ca.getMethods()));
-        System.out.println("Super class names:\n" + String.join("\n", ca.getSuperClasses()));
-    }
-
-    private static String readFile(String filePath) {
-        StringBuilder content = new StringBuilder();
-        try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
-            String line;
-            while ((line = reader.readLine()) != null) {
-                content.append(line).append("\n");
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
+        List<String> fields = ca.getFields().stream().map(f -> " - " + f).collect(Collectors.toList());
+        if (fields.isEmpty()) {
+            System.out.println("No class fields");
+        } else {
+            System.out.println("Class fields:\n" + String.join("\n", fields));
         }
-        return content.toString();
+        List<String> methods = ca.getMethods().stream().map(f -> " - " + f).collect(Collectors.toList());
+        if (methods.isEmpty()) {
+            System.out.println("No class methods");
+        } else {
+            System.out.println("Class methods:\n" + String.join("\n", methods));
+        }
+        List<String> superClasses = ca.getSuperClasses().stream().map(f -> " - " + f).collect(Collectors.toList());
+        System.out.println("Super class names:\n" + String.join("\n", superClasses));
     }
 
 }

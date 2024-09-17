@@ -54,7 +54,11 @@ public class ClassAnalyser {
                 @Override
                 public boolean visit(TypeDeclaration node) {
                     className = node.getName().toString();
-                    superClasses.add(node.getSuperclassType().toString());
+                    if (node.getSuperclassType() != null) {
+                        superClasses.add(node.getSuperclassType().toString());
+                    } else {
+                        superClasses.add("Object");
+                    }
                     return super.visit(node);
                 }
 
